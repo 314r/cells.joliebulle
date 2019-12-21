@@ -68,7 +68,7 @@ function App () {
   const [pitchSpread, setPitchSpread] = useState(0)
 
   const [starters, setStarters] = useState([])
-  const [useStarter, setUseStarter] = useState(false)
+  const [useStarter, setUseStarter] = useState(true)
   const [useAnotherStarter, setUseAnotherStarter] = useState(false)
 
   const onGravityChanged = e => {
@@ -94,7 +94,7 @@ function App () {
 
   useEffect(() => {
     setTargetCells(pitchTarget(gravity, size, pitchRateTarget))
-  }, [gravity, size, pitchRateTarget])
+  }, [gravity, size, pitchRateTarget, pitchTarget])
 
   useEffect(() => {
     if (type === 'liquid') {
@@ -102,23 +102,20 @@ function App () {
     } else if (type === 'dry') {
       setCellsPitched(dryCells(dryWeight, 10))
     }
-  }, [age, cellsPerPack, dryWeight])
+  }, [age, cellsPerPack, dryWeight, type])
 
   useEffect(() => {
     setPitchRateBase(pitchRateCalc(gravity, size, cellsPitched))
-  }, [gravity, size, cellsPitched])
+  }, [gravity, size, cellsPitched, pitchRateCalc])
 
   useEffect(() => {
     setPitchSpread(pitchSpreadCalc(targetCells, cellsPitched))
   }, [targetCells, cellsPitched])
 
   useEffect(() => {
-    pitchSpread > 0 ? setUseStarter(true) : setUseStarter(false)
-    console.log(useStarter)
-  }, [pitchSpread])
-
-  useEffect(() => {
-    if (useStarter) {
+    // pitchSpread > 0 ? setUseStarter(true) : setUseStarter(false)
+    // console.log(useStarter)
+    if (pitchSpread > 0 && useStarter) {
       const dme = dmeQty(1.037, 2)
       const newCells = newCellsStir(cellsPitched, dme)
       const total = totalCells(cellsPitched, newCells)
@@ -132,35 +129,34 @@ function App () {
         total,
         rate
       }
+      setUseStarter(false)
       setStarters(starters.concat([newStarter]))
       newStarter.total < targetCells ? setUseAnotherStarter(true) : setUseAnotherStarter(false)
-    } else {
-      setStarters([])
     }
-  }, [useStarter])
+  }, [pitchSpread, starters, cellsPitched, targetCells, useStarter, pitchRateCalc])
 
   useEffect(() => {
     console.log(starters)
   }, [starters])
 
-  // const starterSizeChanged = e => {
-  //   const newSize = parseFloat(e.target.value)
-  //   const newStarter = { ...starters[0] }
-  //   newStarter.size = newSize
-  //   newStarter.dme = dmeQty(newStarter.gravity, newSize)
-  //   newStarter.newCells = newCellsStir(cellsPitched, newStarter.dme)
-  //   newStarter.total = totalCells(cellsPitched, newStarter.newCells)
-  //   newStarter.rate = pitchRateCalc(newStarter.gravity, newSize, newStarter.total)
+  const onStarterSizeChanged = (index, e) => {
+    const newSize = parseFloat(e.target.value)
+    const newStarter = { ...starters[index] }
+    newStarter.size = newSize
+    newStarter.dme = dmeQty(newStarter.gravity, newSize)
+    newStarter.newCells = newCellsStir(cellsPitched, newStarter.dme)
+    newStarter.total = totalCells(cellsPitched, newStarter.newCells)
+    newStarter.rate = pitchRateCalc(newStarter.gravity, newSize, newStarter.total)
 
-  //   setStarters(updateList(starters, newStarter))
-  //   newStarter.total < targetCells ? setUseAnotherStarter(true) : setUseAnotherStarter(false)
-  // }
+    setStarters(updateList(starters, newStarter))
+    newStarter.total < targetCells ? setUseAnotherStarter(true) : setUseAnotherStarter(false)
+  }
 
   useEffect(() => {
     if (useAnotherStarter) {
       const lastStarter = [...starters].pop()
       console.log(lastStarter)
-      const dme = dmeQty(1.037, 1)
+      const dme = dmeQty(1.037, 2)
       const newCells = newCellsStir(lastStarter.total, dme)
       console.log(newCells)
       const total = totalCells(lastStarter.total, newCells)
@@ -179,7 +175,7 @@ function App () {
     } else {
 
     }
-  }, [useAnotherStarter])
+  }, [useAnotherStarter, pitchRateCalc, starters, targetCells])
 
   return (
     <ThemeProvider theme={theme}>
@@ -196,6 +192,42 @@ function App () {
             <Text>Difference: </Text> <Text>{Math.round(pitchSpread)}M</Text>
           </Flex>
         </Box>
+        <Heading pt={3}>Starter</Heading>
+        {starters.map((step, index) => (
+          <Box key={index} mt={5}>
+            <Text fontWeight='bold'>Step {index + 1}</Text>
+            <Box as='form'
+              pt={3}
+              onSubmit={e => e.preventDefault()}>
+              <Flex width={1}>
+                <Flex alignItems='center' width={1} >
+                  <Label width={1 / 4}>Starter volume</Label>
+                  <Input
+                    width={1 / 4}
+                    type='number'
+                    min='0'
+                    step='0.1'
+                    defaultValue='2'
+                    onChange={e => onStarterSizeChanged(index, e)}
+                  />
+                </Flex>
+
+                <Flex alignItems='center' width={1} >
+                  <Label width={1 / 4} >Starter gravity</Label>
+                  <Input
+                    width={1 / 4}
+                    type='number'
+                    min='1'
+                    step='0.001'
+                    defaultValue='1.037'
+
+                  />
+                </Flex>
+              </Flex>
+            </Box>
+          </Box>
+        )
+        )}
       </Box>
     </ThemeProvider>
   )
