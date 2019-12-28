@@ -113,13 +113,11 @@ function App () {
   }, [targetCells, cellsPitched])
 
   useEffect(() => {
-    // pitchSpread > 0 ? setUseStarter(true) : setUseStarter(false)
-    // console.log(useStarter)
     if (pitchSpread > 0 && useStarter) {
       const dme = dmeQty(1.037, 2)
       const newCells = newCellsStir(cellsPitched, dme)
       const total = totalCells(cellsPitched, newCells)
-      const rate = pitchRateCalc(1.037, 2, total)
+      const rate = pitchRateCalc(gravity, size, total)
       const newStarter = {
         id: nanoid(),
         size: 2,
@@ -146,7 +144,7 @@ function App () {
     newStarter.dme = dmeQty(newStarter.gravity, newSize)
     newStarter.newCells = newCellsStir(cellsPitched, newStarter.dme)
     newStarter.total = totalCells(cellsPitched, newStarter.newCells)
-    newStarter.rate = pitchRateCalc(newStarter.gravity, newSize, newStarter.total)
+    newStarter.rate = pitchRateCalc(gravity, size, newStarter.total)
 
     setStarters(updateList(starters, newStarter))
     newStarter.total < targetCells ? setUseAnotherStarter(true) : setUseAnotherStarter(false)
@@ -155,12 +153,11 @@ function App () {
   useEffect(() => {
     if (useAnotherStarter) {
       const lastStarter = [...starters].pop()
-      console.log(lastStarter)
+      console.log('pop')
       const dme = dmeQty(1.037, 2)
       const newCells = newCellsStir(lastStarter.total, dme)
-      console.log(newCells)
       const total = totalCells(lastStarter.total, newCells)
-      const rate = pitchRateCalc(1.037, 2, total)
+      const rate = pitchRateCalc(gravity, size, total)
       const newStarter = {
         id: nanoid(),
         size: 2,
@@ -171,9 +168,15 @@ function App () {
         rate
       }
       newStarter.total < targetCells ? setUseAnotherStarter(true) : setUseAnotherStarter(false)
-      setStarters(starters.concat([newStarter]))
+      const newStarters = [...starters]
+      newStarters[1] = newStarter
+      setStarters(newStarters)
     } else {
-
+      const newStarters = [...starters]
+      if (newStarters.length > 1 && newStarters[0].total > targetCells) {
+        newStarters.pop()
+        setStarters(newStarters)
+      }
     }
   }, [useAnotherStarter, pitchRateCalc, starters, targetCells])
 
