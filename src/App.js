@@ -133,7 +133,7 @@ function App () {
     } else if (newStarters.length === 0) {
       generateStarter()
     }
-  }, [starters, targetCells])
+  })
 
   const onStarterSizeChanged = (index, e) => {
     const newSize = parseFloat(e.target.value)
@@ -254,6 +254,17 @@ function App () {
                 step='0.15'
                 defaultValue='1'
                 onChange={e => onRateTargetChanged(e)}
+              />
+            </Flex>
+            <Flex alignItems='center' width={1} >
+              <Label width={1 / 4}>Batch Size</Label>
+              <Input
+                width={1 / 4}
+                type='number'
+                min='1'
+                step='1'
+                defaultValue='30'
+                onChange={e => onSizeChanged(e)}
               />
             </Flex>
           </Flex>
