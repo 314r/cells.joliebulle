@@ -68,8 +68,7 @@ function App () {
   const [pitchSpread, setPitchSpread] = useState(0)
 
   const [starters, setStarters] = useState([])
-  const [useStarter, setUseStarter] = useState(true)
-  const [useAnotherStarter, setUseAnotherStarter] = useState(false)
+  const [useStarter, setUseStarter] = useState(false)
 
   const onGravityChanged = e => {
     setGravity(parseFloat(e.target.value))
@@ -109,11 +108,73 @@ function App () {
   }, [gravity, size, cellsPitched, pitchRateCalc])
 
   useEffect(() => {
-    setPitchSpread(pitchSpreadCalc(targetCells, cellsPitched))
+    const spread = pitchSpreadCalc(targetCells, cellsPitched)
+    if (spread <= 0) {
+      setStarters([])
+    }
+    setPitchSpread(spread)
   }, [targetCells, cellsPitched])
 
   useEffect(() => {
-    if (pitchSpread > 0 && useStarter) {
+    console.log(starters)
+  }, [starters])
+
+  useEffect(() => {
+    const newStarters = [...starters]
+    if (newStarters.length === 2) {
+      if (newStarters[0].total >= targetCells) {
+        newStarters.pop()
+        setStarters(newStarters)
+      }
+    } else if (newStarters.length === 1) {
+      if (newStarters[0].total < targetCells) {
+        generateStarter2(newStarters[0])
+      }
+    } else if (newStarters.length === 0) {
+      generateStarter()
+    }
+  }, [starters, targetCells])
+
+  const onStarterSizeChanged = (index, e) => {
+    const newSize = parseFloat(e.target.value)
+    const newStarter = { ...starters[index] }
+    newStarter.size = newSize
+    newStarter.dme = dmeQty(newStarter.gravity, newSize)
+    if (index === 0) {
+      newStarter.newCells = newCellsStir(cellsPitched, newStarter.dme)
+      newStarter.total = totalCells(cellsPitched, newStarter.newCells)
+      newStarter.rate = pitchRateCalc(gravity, size, newStarter.total)
+      generateStarter2(newStarter)
+    }
+    if (index === 1) {
+      newStarter.newCells = newCellsStir(starters[0].total, newStarter.dme)
+      newStarter.total = totalCells(starters[0].total, newStarter.newCells)
+      newStarter.rate = pitchRateCalc(gravity, size, newStarter.total)
+      setStarters(updateList([...starters], newStarter))
+    }
+  }
+
+  const onStarterGravityChanged = (index, e) => {
+    const newGravity = parseFloat(e.target.value)
+    const newStarter = { ...starters[index] }
+    newStarter.gravity = newGravity
+    newStarter.dme = dmeQty(newGravity, newStarter.size)
+    if (index === 0) {
+      newStarter.newCells = newCellsStir(cellsPitched, newStarter.dme)
+      newStarter.total = totalCells(cellsPitched, newStarter.newCells)
+      newStarter.rate = pitchRateCalc(gravity, size, newStarter.total)
+      generateStarter2(newStarter)
+    }
+    if (index === 1) {
+      newStarter.newCells = newCellsStir(starters[0].total, newStarter.dme)
+      newStarter.total = totalCells(starters[0].total, newStarter.newCells)
+      newStarter.rate = pitchRateCalc(gravity, size, newStarter.total)
+      setStarters(updateList([...starters], newStarter))
+    }
+  }
+
+  const generateStarter = () => {
+    if (pitchSpread > 0) {
       const dme = dmeQty(1.037, 2)
       const newCells = newCellsStir(cellsPitched, dme)
       const total = totalCells(cellsPitched, newCells)
@@ -127,63 +188,76 @@ function App () {
         total,
         rate
       }
-      setUseStarter(false)
       setStarters(starters.concat([newStarter]))
-      newStarter.total < targetCells ? setUseAnotherStarter(true) : setUseAnotherStarter(false)
+      if (newStarter.total < targetCells) {
+        const dme = dmeQty(1.037, 2)
+        const newCells = newCellsStir(newStarter.total, dme)
+        const total = totalCells(newStarter.total, newCells)
+        const rate = pitchRateCalc(gravity, size, total)
+        const starter2 = {
+          id: nanoid(),
+          size: 2,
+          gravity: 1.037,
+          dme,
+          newCells,
+          total,
+          rate
+        }
+        const generatedStarters = [newStarter].concat([starter2])
+        setStarters(starters.concat(generatedStarters))
+      }
     }
-  }, [pitchSpread, starters, cellsPitched, targetCells, useStarter, pitchRateCalc])
-
-  useEffect(() => {
-    console.log(starters)
-  }, [starters])
-
-  const onStarterSizeChanged = (index, e) => {
-    const newSize = parseFloat(e.target.value)
-    const newStarter = { ...starters[index] }
-    newStarter.size = newSize
-    newStarter.dme = dmeQty(newStarter.gravity, newSize)
-    newStarter.newCells = newCellsStir(cellsPitched, newStarter.dme)
-    newStarter.total = totalCells(cellsPitched, newStarter.newCells)
-    newStarter.rate = pitchRateCalc(gravity, size, newStarter.total)
-
-    setStarters(updateList(starters, newStarter))
-    newStarter.total < targetCells ? setUseAnotherStarter(true) : setUseAnotherStarter(false)
   }
 
-  useEffect(() => {
-    if (useAnotherStarter) {
-      const lastStarter = [...starters].pop()
-      console.log('pop')
-      const dme = dmeQty(1.037, 2)
-      const newCells = newCellsStir(lastStarter.total, dme)
-      const total = totalCells(lastStarter.total, newCells)
+  const generateStarter2 = (starter1) => {
+    if (starter1.total < targetCells && starters.length > 1) {
+      const id = starters[1].id
+      const starterGravity = starters[1].gravity
+      const starterSize = starters[1].size
+      const dme = starters[1].dme
+      const newCells = newCellsStir(starter1.total, dme)
+      const total = totalCells(starter1.total, newCells)
       const rate = pitchRateCalc(gravity, size, total)
-      const newStarter = {
-        id: nanoid(),
-        size: 2,
-        gravity: 1.037,
-        dme,
-        newCells,
-        total,
-        rate
-      }
-      newStarter.total < targetCells ? setUseAnotherStarter(true) : setUseAnotherStarter(false)
-      const newStarters = [...starters]
-      newStarters[1] = newStarter
+      const starter2 = { id, size: starterSize, gravity: starterGravity, dme, newCells, total, rate }
+      const newStarters = [starter1].concat(starter2)
+      setStarters(newStarters)
+    } else if (starter1.total < targetCells && starters.length === 1) {
+      const id = nanoid()
+      const starterGravity = 1.037
+      const starterSize = 2
+      const dme = dmeQty(1.037, 2)
+      const newCells = newCellsStir(starter1.total, dme)
+      const total = totalCells(starter1.total, newCells)
+      const rate = pitchRateCalc(gravity, size, total)
+      const starter2 = { id, size: starterSize, gravity: starterGravity, dme, newCells, total, rate }
+      const newStarters = [starter1].concat(starter2)
       setStarters(newStarters)
     } else {
-      const newStarters = [...starters]
-      if (newStarters.length > 1 && newStarters[0].total > targetCells) {
-        newStarters.pop()
-        setStarters(newStarters)
-      }
+      setStarters([starter1])
     }
-  }, [useAnotherStarter, pitchRateCalc, starters, targetCells])
+  }
 
   return (
     <ThemeProvider theme={theme}>
       <Box p={5}>
         <Heading pt={3}>Pitching rate</Heading>
+        <Box as='form'
+          pt={3}
+          onSubmit={e => e.preventDefault()}>
+          <Flex width={1}>
+            <Flex alignItems='center' width={1} >
+              <Label width={1 / 4}>Target Pitching Rate</Label>
+              <Input
+                width={1 / 4}
+                type='number'
+                min='0.35'
+                step='0.15'
+                defaultValue='1'
+                onChange={e => onRateTargetChanged(e)}
+              />
+            </Flex>
+          </Flex>
+        </Box>
         <Box>
           <Flex>
             <Text>Target cells count: </Text> <Text>{Math.round(targetCells)}M</Text>
@@ -223,9 +297,20 @@ function App () {
                     min='1'
                     step='0.001'
                     defaultValue='1.037'
-
+                    onChange={e => onStarterGravityChanged(index, e)}
                   />
                 </Flex>
+              </Flex>
+            </Box>
+            <Box>
+              <Flex mt={4}>
+                <Text width={1 / 4}>DME needed</Text> <Text >{Math.round(starters[index].dme)}g</Text>
+              </Flex>
+              <Flex>
+                <Text width={1 / 4}>New cells</Text> <Text>{Math.round(starters[index].newCells)} Billions</Text>
+              </Flex>
+              <Flex>
+                <Text width={1 / 4}>Total cells count </Text> <Text>{Math.round(starters[index].total)} Billions</Text>
               </Flex>
             </Box>
           </Box>
