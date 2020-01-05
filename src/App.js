@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './App.css'
+import DryConf from './DryConf.js'
+import LiquidConf from './LiquidConf.js'
 import { ThemeProvider } from 'emotion-theming'
 import theme from '@rebass/preset'
 import {
@@ -11,7 +13,8 @@ import {
 } from 'rebass'
 import {
   Label,
-  Input
+  Input,
+  Radio
 } from '@rebass/forms'
 
 const nanoid = require('nanoid')
@@ -52,8 +55,6 @@ function App () {
   const totalCells = (cells, newCells) => cells + newCells
   const dmeQty = (target, volume) => (target - 1) * 1000 * 2.73 * volume
 
-  const starterTemplate = { dme: 0, gravity: 0, mode: 'stir' }
-
   const [size, setSize] = useState(30)
   const [gravity, setGravity] = useState(1.060)
   const [pitchRateTarget, setPitchRateTarget] = useState(1)
@@ -68,7 +69,6 @@ function App () {
   const [pitchSpread, setPitchSpread] = useState(0)
 
   const [starters, setStarters] = useState([])
-  const [useStarter, setUseStarter] = useState(false)
 
   const onGravityChanged = e => {
     setGravity(parseFloat(e.target.value))
@@ -267,7 +267,41 @@ function App () {
                 onChange={e => onSizeChanged(e)}
               />
             </Flex>
+            <Flex alignItems='center' width={1} >
+              <Label width={1 / 4}>Gravity</Label>
+              <Input
+                width={1 / 4}
+                type='number'
+                min='1.000'
+                step='0.01'
+                defaultValue='1.060'
+                onChange={e => onGravityChanged(e)}
+              />
+            </Flex>
           </Flex>
+          <Box width={1}>
+            <Text fontWeight='bold' mb={2} mt={4}>Yeast Type</Text>
+            <Flex mx={-2}>
+              <Label width={1 / 4} p={2}>
+                <Radio
+                  id='liquid'
+                  name='type'
+                  value='liquid'
+                  defaultChecked
+                />
+      Liquid
+              </Label>
+              <Label width={1 / 4} p={2}>
+                <Radio
+                  id='dry'
+                  name='type'
+                  value='dry'
+                />
+      Dry
+              </Label>
+            </Flex>
+
+          </Box>
         </Box>
         <Box>
           <Flex>
