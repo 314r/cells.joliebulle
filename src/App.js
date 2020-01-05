@@ -80,6 +80,7 @@ function App () {
     setPitchRateTarget(parseFloat(e.target.value))
   }
   const onTypeChanged = e => {
+    console.log(e.target.value)
     setType(e.target.value)
   }
   const onCellsPerPackChanged = e => {
@@ -288,6 +289,7 @@ function App () {
                   name='type'
                   value='liquid'
                   defaultChecked
+                  onChange={e => onTypeChanged(e)}
                 />
       Liquid
               </Label>
@@ -296,11 +298,14 @@ function App () {
                   id='dry'
                   name='type'
                   value='dry'
+                  onChange={e => onTypeChanged(e)}
                 />
       Dry
               </Label>
             </Flex>
-
+            {
+              type === 'liquid' ? <LiquidConf /> : <DryConf />
+            }
           </Box>
         </Box>
         <Box>
