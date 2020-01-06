@@ -304,7 +304,12 @@ function App () {
               </Label>
             </Flex>
             {
-              type === 'liquid' ? <LiquidConf /> : <DryConf />
+              type === 'liquid'
+                ? <LiquidConf
+                  onCellsPerPackChanged={() => onCellsPerPackChanged()}
+                  onAgeChanged={e => onAgeChanged(e)}
+                />
+                : <DryConf />
             }
           </Box>
         </Box>
