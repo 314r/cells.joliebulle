@@ -88,7 +88,7 @@ function App () {
   }
   const onAgeChanged = e => {
     setAge(parseFloat(e.target.value))
-    setCellsPitched(viableCells(parseFloat(e.target.vlaue), cellsPerPack))
+    setCellsPitched(viableCells(parseFloat(e.target.value), cellsPerPack))
   }
   const onDryWeightChanged = e => setDryWeight(parseFloat(e.target.value))
 
@@ -119,6 +119,10 @@ function App () {
   useEffect(() => {
     console.log(starters)
   }, [starters])
+
+  useEffect(() => {
+    generateStarter()
+  }, [cellsPitched])
 
   useEffect(() => {
     const newStarters = [...starters]
@@ -189,7 +193,7 @@ function App () {
         total,
         rate
       }
-      setStarters(starters.concat([newStarter]))
+      setStarters([newStarter])
       if (newStarter.total < targetCells) {
         const dme = dmeQty(1.037, 2)
         const newCells = newCellsStir(newStarter.total, dme)
@@ -205,7 +209,7 @@ function App () {
           rate
         }
         const generatedStarters = [newStarter].concat([starter2])
-        setStarters(starters.concat(generatedStarters))
+        setStarters(generatedStarters)
       }
     }
   }
