@@ -10,7 +10,7 @@ import {
   Radio
 } from '@rebass/forms'
 
-function LiquidConf (props) {
+function LiquidConf ({ onCellsPerPackChanged, onAgeChanged }) {
   return (
 
     <Box as='form'
@@ -24,6 +24,7 @@ function LiquidConf (props) {
           min='1'
           step='10'
           defaultValue='100'
+          onChange={e => onCellsPerPackChanged(e)}
         />
       </Flex>
       <Flex alignItems='center' width={1 / 2} mt={2} mb={4}>
@@ -34,7 +35,7 @@ function LiquidConf (props) {
           min='0'
           step='1'
           defaultValue='1'
-          onChange={e => props.onAgeChanged(e)}
+          onChange={e => onAgeChanged(e)}
         />
       </Flex>
     </Box>

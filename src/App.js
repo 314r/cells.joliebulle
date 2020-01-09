@@ -310,7 +310,7 @@ function App () {
             {
               type === 'liquid'
                 ? <LiquidConf
-                  onCellsPerPackChanged={() => onCellsPerPackChanged()}
+                  onCellsPerPackChanged={e => onCellsPerPackChanged(e)}
                   onAgeChanged={e => onAgeChanged(e)}
                 />
                 : <DryConf />
