@@ -313,7 +313,7 @@ function App () {
                   onCellsPerPackChanged={e => onCellsPerPackChanged(e)}
                   onAgeChanged={e => onAgeChanged(e)}
                 />
-                : <DryConf />
+                : <DryConf onDryWeightChanged={e => onDryWeightChanged(e)} />
             }
           </Box>
         </Box>

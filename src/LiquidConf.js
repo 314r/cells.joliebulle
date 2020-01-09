@@ -1,13 +1,11 @@
 import React from 'react'
 import {
   Box,
-  Text,
   Flex
 } from 'rebass'
 import {
   Label,
-  Input,
-  Radio
+  Input
 } from '@rebass/forms'
 
 function LiquidConf ({ onCellsPerPackChanged, onAgeChanged }) {
