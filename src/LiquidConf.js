@@ -13,9 +13,12 @@ function LiquidConf ({ onCellsPerPackChanged, onAgeChanged }) {
 
     <Box as='form'
       pt={3}
-      onSubmit={e => e.preventDefault()} >
-      <Flex alignItems='center' width={1 / 2} >
-        <Label width={1 / 2}>Original Cell Count (Billions)</Label>
+      mb={3}
+      onSubmit={e => e.preventDefault()}
+      width={1}
+    >
+      <Flex alignItems='center' width={1} mt={3} >
+        <Label width={1 / 2}>Original Cell Count</Label>
         <Input
           width={1 / 4}
           type='number'
@@ -25,10 +28,10 @@ function LiquidConf ({ onCellsPerPackChanged, onAgeChanged }) {
           onChange={e => onCellsPerPackChanged(e)}
         />
       </Flex>
-      <Flex alignItems='center' width={1 / 2} mt={2} mb={4}>
+      <Flex alignItems='center' width={1} mt={3}>
         <Label width={1 / 2}>Age (months)</Label>
         <Input
-          width={1 / 4}
+          width={1 / 8}
           type='number'
           min='0'
           step='1'

@@ -18,6 +18,8 @@ import {
 } from '@rebass/forms'
 
 const nanoid = require('nanoid')
+// suggested rates
+// design
 
 function App () {
   const updateList = (itemList, updatedItem) =>
@@ -245,99 +247,124 @@ function App () {
   return (
     <ThemeProvider theme={theme}>
       <Box p={5}>
-        <Heading pt={3}>Pitching rate</Heading>
+
         <Box as='form'
           pt={3}
+          fontWeight={500}
           onSubmit={e => e.preventDefault()}>
-          <Flex width={1}>
-            <Flex alignItems='center' width={1} >
-              <Label width={1 / 4}>Target Pitching Rate</Label>
-              <Input
-                width={1 / 4}
-                type='number'
-                min='0.35'
-                step='0.15'
-                defaultValue='1'
-                onChange={e => onRateTargetChanged(e)}
-              />
-            </Flex>
-            <Flex alignItems='center' width={1} >
-              <Label width={1 / 4}>Batch Size</Label>
-              <Input
-                width={1 / 4}
-                type='number'
-                min='1'
-                step='1'
-                defaultValue='30'
-                onChange={e => onSizeChanged(e)}
-              />
-            </Flex>
-            <Flex alignItems='center' width={1} >
-              <Label width={1 / 4}>Gravity</Label>
-              <Input
-                width={1 / 4}
-                type='number'
-                min='1.000'
-                step='0.01'
-                defaultValue='1.060'
-                onChange={e => onGravityChanged(e)}
-              />
-            </Flex>
-          </Flex>
-          <Box width={1}>
-            <Text fontWeight='bold' mb={2} mt={4}>Yeast Type</Text>
-            <Flex mx={-2}>
-              <Label width={1 / 4} p={2}>
-                <Radio
-                  id='liquid'
-                  name='type'
-                  value='liquid'
-                  defaultChecked
-                  onChange={e => onTypeChanged(e)}
+          <Flex>
+            <Flex width={1 / 3} flexDirection='column' pr={4}>
+              <Box>
+                <Text fontWeight='bold' pt={3}>Batch details</Text>
+                <hr style={{ border: 'none', height: '1px', borderWidth: '1px', borderRadius: '1px', backgroundColor: 'rgb(211, 211, 211)' }} />
+              </Box>
+              <Flex alignItems='center' width={1} mt={3}>
+                <Label width={1 / 4}>Size (L)</Label>
+                <Input
+                  width={1 / 4}
+                  type='number'
+                  min='1'
+                  step='1'
+                  defaultValue='30'
+                  onChange={e => onSizeChanged(e)}
                 />
+              </Flex>
+              <Flex alignItems='center' width={1} mt={3} >
+                <Label width={1 / 4}>Gravity</Label>
+                <Input
+                  width={1 / 4}
+                  type='number'
+                  min='1.000'
+                  step='0.01'
+                  defaultValue='1.060'
+                  onChange={e => onGravityChanged(e)}
+                />
+              </Flex>
+            </Flex>
+            <Flex width={1 / 3} mb={5} flexDirection='column' pr={4}>
+              <Box>
+                <Text fontWeight='bold' pt={3}>Pitching rate</Text>
+                <hr style={{ border: 'none', height: '1px', borderWidth: '1px', borderRadius: '1px', backgroundColor: 'rgb(211, 211, 211)' }} />
+              </Box>
+
+              <Flex alignItems='center' width={1} mt={3} >
+                <Label width={1 / 4}>Target Rate</Label>
+                <Input
+                  width={1 / 8}
+                  type='number'
+                  min='0.35'
+                  step='0.15'
+                  defaultValue='1'
+                  onChange={e => onRateTargetChanged(e)}
+                />
+              </Flex>
+            </Flex>
+            <Box width={1 / 3}>
+              <Box>
+                <Text fontWeight='bold' mb={2} pt={3}>Yeast Type</Text>
+                <hr style={{ border: 'none', height: '1px', borderWidth: '1px', borderRadius: '1px', backgroundColor: 'rgb(211, 211, 211)' }} />
+              </Box>
+
+              <Flex mx={-2}>
+                <Label width={1 / 2} pt={3} pl={2}>
+                  <Radio
+                    id='liquid'
+                    name='type'
+                    value='liquid'
+                    defaultChecked
+                    onChange={e => onTypeChanged(e)}
+                  />
       Liquid
-              </Label>
-              <Label width={1 / 4} p={2}>
-                <Radio
-                  id='dry'
-                  name='type'
-                  value='dry'
-                  onChange={e => onTypeChanged(e)}
-                />
+                </Label>
+                <Label width={1 / 4} p={2}>
+                  <Radio
+                    id='dry'
+                    name='type'
+                    value='dry'
+                    onChange={e => onTypeChanged(e)}
+                  />
       Dry
-              </Label>
+                </Label>
+              </Flex>
+              {
+                type === 'liquid'
+                  ? <LiquidConf
+                    onCellsPerPackChanged={e => onCellsPerPackChanged(e)}
+                    onAgeChanged={e => onAgeChanged(e)}
+                  />
+                  : <DryConf onDryWeightChanged={e => onDryWeightChanged(e)} />
+              }
+            </Box>
+          </Flex>
+
+          <Box py={4} fontSize={1} mt={3} fontWeight={800} sx={{ textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+            <Flex>
+              <Text width={1 / 4}>Target cells count: </Text> <Text>{Math.round(targetCells)} billions</Text>
             </Flex>
-            {
-              type === 'liquid'
-                ? <LiquidConf
-                  onCellsPerPackChanged={e => onCellsPerPackChanged(e)}
-                  onAgeChanged={e => onAgeChanged(e)}
-                />
-                : <DryConf onDryWeightChanged={e => onDryWeightChanged(e)} />
-            }
+            <Flex py={3}>
+              <Text width={1 / 4}>Actual cells count: </Text> <Text color='#FF00AA'>{Math.round(cellsPitched)} Billions ({Math.round(pitchRateBase * 100) / 100}M cells/ml/°P)</Text>
+            </Flex>
+            <Flex>
+              <Text width={1 / 4}>Difference: </Text> <Text>{Math.round(pitchSpread)} Billons</Text>
+            </Flex>
           </Box>
         </Box>
-        <Box>
-          <Flex>
-            <Text>Target cells count: </Text> <Text>{Math.round(targetCells)}M</Text>
-          </Flex>
-          <Flex>
-            <Text>Actual cells count: </Text> <Text>{Math.round(cellsPitched)} ({Math.round(pitchRateBase * 100) / 100}M cells/ml/°P)</Text>
-          </Flex>
-          <Flex>
-            <Text>Difference: </Text> <Text>{Math.round(pitchSpread)}M</Text>
-          </Flex>
-        </Box>
-        <Heading pt={3}>Starter</Heading>
+        <Heading pt={5}>⚙️&nbsp;Starters</Heading>
+        {pitchSpread < 0 && <Text fontWeight={500} pt={4}>🎁&nbsp;Not required</Text> }
         {starters.map((step, index) => (
-          <Box key={index} mt={5}>
-            <Text fontWeight='bold'>Step {index + 1}</Text>
+
+          <Box key={index} mt={4}>
             <Box as='form'
               pt={3}
+              width={1 / 3}
+              pr={4}
+              fontWeight={500}
               onSubmit={e => e.preventDefault()}>
-              <Flex width={1}>
+              <Text fontWeight='bold'>Step {index + 1}</Text>
+              <hr style={{ border: 'none', height: '1px', borderWidth: '1px', borderRadius: '1px', backgroundColor: 'rgb(211, 211, 211)' }} />
+              <Flex width={1} flexDirection='column' pt={3}>
                 <Flex alignItems='center' width={1} >
-                  <Label width={1 / 4}>Starter volume</Label>
+                  <Label width={1 / 4}>Volume (L)</Label>
                   <Input
                     width={1 / 4}
                     type='number'
@@ -348,8 +375,8 @@ function App () {
                   />
                 </Flex>
 
-                <Flex alignItems='center' width={1} >
-                  <Label width={1 / 4} >Starter gravity</Label>
+                <Flex alignItems='center' width={1} pt={3}>
+                  <Label width={1 / 4} >Gravity</Label>
                   <Input
                     width={1 / 4}
                     type='number'
@@ -361,15 +388,15 @@ function App () {
                 </Flex>
               </Flex>
             </Box>
-            <Box>
-              <Flex mt={4}>
+            <Box sx={{ textTransform: 'uppercase', letterSpacing: '0.1em' }} fontWeight='bold' fontSize={1} pb={4}>
+              <Flex mt={4} >
                 <Text width={1 / 4}>DME needed</Text> <Text >{Math.round(starters[index].dme)}g</Text>
               </Flex>
               <Flex>
                 <Text width={1 / 4}>New cells</Text> <Text>{Math.round(starters[index].newCells)} Billions</Text>
               </Flex>
               <Flex>
-                <Text width={1 / 4}>Total cells count </Text> <Text>{Math.round(starters[index].total)} Billions</Text>
+                <Text width={1 / 4} >Total cells count </Text> <Text color='#FF00AA'>{Math.round(starters[index].total)} Billions</Text>
               </Flex>
             </Box>
           </Box>
