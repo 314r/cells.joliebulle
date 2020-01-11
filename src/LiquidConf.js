@@ -18,9 +18,9 @@ function LiquidConf ({ onCellsPerPackChanged, onAgeChanged }) {
       width={1}
     >
       <Flex alignItems='center' width={1} mt={3} >
-        <Label width={1 / 2}>Original Cell Count</Label>
+        <Label width={[1 / 2, 1 / 2, 1 / 2]}>Original Cell Count</Label>
         <Input
-          width={1 / 4}
+          width={[1 / 2, 1 / 4, 1 / 4]}
           type='number'
           min='1'
           step='10'
@@ -31,7 +31,7 @@ function LiquidConf ({ onCellsPerPackChanged, onAgeChanged }) {
       <Flex alignItems='center' width={1} mt={3}>
         <Label width={1 / 2}>Age (months)</Label>
         <Input
-          width={1 / 8}
+          width={[1 / 2, 1 / 4, 1 / 8]}
           type='number'
           min='0'
           step='1'

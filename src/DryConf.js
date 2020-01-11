@@ -16,9 +16,9 @@ function DryConf ({ onDryWeightChanged }) {
       onSubmit={e => e.preventDefault()} >
 
       <Flex alignItems='center' width={1} pt={3} pb={1} >
-        <Label width={1 / 2}>Yeast amount (grams)</Label>
+        <Label width={[1 / 2, 1 / 2, 1 / 2]}>Yeast amount (grams)</Label>
         <Input
-          width={1 / 8}
+          width={[1 / 2, 1 / 4, 1 / 4]}
           type='number'
           min='1'
           step='1'

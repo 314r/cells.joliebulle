@@ -9,8 +9,7 @@ import {
   Box,
   Text,
   Flex,
-  Heading,
-  Link
+  Heading
 } from 'rebass'
 import {
   Label,
@@ -22,10 +21,7 @@ import {
   Menu,
   MenuList,
   MenuButton,
-  MenuItem,
-  MenuItems,
-  MenuPopover,
-  MenuLink
+  MenuItem
 } from '@reach/menu-button'
 import '@reach/menu-button/styles.css'
 
@@ -33,6 +29,7 @@ const nanoid = require('nanoid')
 
 // responsive design
 // no starter if dry
+// no stir
 // remove icon
 
 const StyledMenuButton = styled(MenuButton)`
@@ -45,7 +42,7 @@ const StyledMenuButton = styled(MenuButton)`
   height:26px;
   padding-right:8px;
   padding-left:8px;
-  margin-top:5px;
+  margin-top:6px;
   transition: all 0.2s ease 0s;
   :focus {
     outline: 0;
@@ -309,16 +306,16 @@ function App () {
           pt={3}
           fontWeight={500}
           onSubmit={e => e.preventDefault()}>
-          <Flex>
-            <Flex width={1 / 3} flexDirection='column' pr={4}>
+          <Flex flexWrap='wrap'>
+            <Flex width={[1, 1 / 2, 1 / 3]} flexDirection='column' pr={4} mb={4}>
               <Box>
                 <Text fontWeight='bold' pt={3}>Batch details</Text>
                 <hr style={{ border: 'none', height: '1px', borderWidth: '1px', borderRadius: '1px', backgroundColor: 'rgb(211, 211, 211)' }} />
               </Box>
               <Flex alignItems='center' width={1} mt={3}>
-                <Label width={1 / 4}>Size (L)</Label>
+                <Label width={[1 / 2, 1 / 2, 1 / 2]}>Size (L)</Label>
                 <Input
-                  width={1 / 4}
+                  width={[1 / 2, 1 / 4, 1 / 4]}
                   type='number'
                   min='1'
                   step='1'
@@ -327,9 +324,9 @@ function App () {
                 />
               </Flex>
               <Flex alignItems='center' width={1} mt={3} >
-                <Label width={1 / 4}>Gravity</Label>
+                <Label width={[1 / 2, 1 / 2, 1 / 2]}>Gravity</Label>
                 <Input
-                  width={1 / 4}
+                  width={[1 / 2, 1 / 4, 1 / 4]}
                   type='number'
                   min='1.000'
                   step='0.01'
@@ -338,7 +335,7 @@ function App () {
                 />
               </Flex>
             </Flex>
-            <Flex width={1 / 3} mb={5} flexDirection='column' pr={4}>
+            <Flex width={[1, 1 / 2, 1 / 3]} mb={4} flexDirection='column' pr={4}>
               <Box>
                 <Flex justifyContent='space-between'>
                   <Text fontWeight='bold' pt={3}>Pitching rate</Text>
@@ -356,9 +353,9 @@ function App () {
               </Box>
 
               <Flex alignItems='center' width={1} mt={3} >
-                <Label width={1 / 4}>Target Rate</Label>
+                <Label width={[1 / 2, 1 / 2, 1 / 2]}>Target Rate</Label>
                 <Input
-                  width={1 / 4}
+                  width={[1 / 2, 1 / 2, 1 / 4]}
                   type='number'
                   min='0.15'
                   step='0.05'
@@ -368,7 +365,7 @@ function App () {
               </Flex>
               <Text color='#8e8e8e' fontWeight={500} mt={2}>Cells/ml/°Plato</Text>
             </Flex>
-            <Box width={1 / 3}>
+            <Flex width={[1, 1 / 2, 1 / 3]} flexDirection='column'>
               <Box>
                 <Text fontWeight='bold' mb={2} pt={3}>Yeast Type</Text>
                 <hr style={{ border: 'none', height: '1px', borderWidth: '1px', borderRadius: '1px', backgroundColor: 'rgb(211, 211, 211)' }} />
@@ -385,7 +382,7 @@ function App () {
                   />
       Liquid
                 </Label>
-                <Label width={1 / 4} p={2}>
+                <Label width={1 / 4} pt={3}>
                   <Radio
                     id='dry'
                     name='type'
@@ -403,18 +400,18 @@ function App () {
                   />
                   : <DryConf onDryWeightChanged={e => onDryWeightChanged(e)} />
               }
-            </Box>
+            </Flex>
           </Flex>
 
           <Box py={4} fontSize={1} mt={3} fontWeight={800} sx={{ textTransform: 'uppercase', letterSpacing: '0.1em' }}>
             <Flex>
-              <Text width={1 / 4}>Target cells count: </Text> <Text>{Math.round(targetCells)} billions</Text>
+              <Text width={[1 / 2, 1 / 4, 1 / 4]}>Target cells count: </Text> <Text width={[1 / 2, 1 / 4, 1 / 4]}>{Math.round(targetCells)} billions</Text>
             </Flex>
             <Flex py={3}>
-              <Text width={1 / 4}>Actual cells count: </Text> <Text color='#FF00AA'>{Math.round(cellsPitched)} Billions ({Math.round(pitchRateBase * 100) / 100}M cells/ml/°P)</Text>
+              <Text width={[1 / 2, 1 / 4, 1 / 4]}>Actual cells count: </Text> <Text width={[1 / 2, 1 / 4, 1 / 4]} color='#FF00AA'>{Math.round(cellsPitched)} Billions ({Math.round(pitchRateBase * 100) / 100}M cells/ml/°P)</Text>
             </Flex>
             <Flex>
-              <Text width={1 / 4}>Difference: </Text> <Text>{Math.round(pitchSpread)} Billons</Text>
+              <Text width={[1 / 2, 1 / 4, 1 / 4]}>Difference: </Text> <Text width={[1 / 2, 1 / 4, 1 / 4]}>{Math.round(pitchSpread)} Billons</Text>
             </Flex>
           </Box>
         </Box>
@@ -425,7 +422,7 @@ function App () {
           <Box key={index} mt={4}>
             <Box as='form'
               pt={3}
-              width={1 / 3}
+              width={[1, 1, 1 / 3]}
               pr={4}
               fontWeight={500}
               onSubmit={e => e.preventDefault()}>
@@ -433,9 +430,9 @@ function App () {
               <hr style={{ border: 'none', height: '1px', borderWidth: '1px', borderRadius: '1px', backgroundColor: 'rgb(211, 211, 211)' }} />
               <Flex width={1} flexDirection='column' pt={3}>
                 <Flex alignItems='center' width={1} >
-                  <Label width={1 / 4}>Volume (L)</Label>
+                  <Label width={[1 / 2, 1 / 4, 1 / 4]}>Volume (L)</Label>
                   <Input
-                    width={1 / 4}
+                    width={[1 / 2, 1 / 4, 1 / 4]}
                     type='number'
                     min='0'
                     step='0.1'
@@ -445,9 +442,9 @@ function App () {
                 </Flex>
 
                 <Flex alignItems='center' width={1} pt={3}>
-                  <Label width={1 / 4} >Gravity</Label>
+                  <Label width={[1 / 2, 1 / 4, 1 / 4]} >Gravity</Label>
                   <Input
-                    width={1 / 4}
+                    width={[1 / 2, 1 / 4, 1 / 4]}
                     type='number'
                     min='1'
                     step='0.001'
@@ -459,13 +456,13 @@ function App () {
             </Box>
             <Box sx={{ textTransform: 'uppercase', letterSpacing: '0.1em' }} fontWeight='bold' fontSize={1} pb={4}>
               <Flex mt={4} >
-                <Text width={1 / 4}>DME needed</Text> <Text >{Math.round(starters[index].dme)}g</Text>
+                <Text width={[1 / 2, 1 / 4, 1 / 4]}>DME needed</Text> <Text >{Math.round(starters[index].dme)}g</Text>
               </Flex>
               <Flex>
-                <Text width={1 / 4}>New cells</Text> <Text>{Math.round(starters[index].newCells)} Billions</Text>
+                <Text width={[1 / 2, 1 / 4, 1 / 4]}>New cells</Text> <Text>{Math.round(starters[index].newCells)} Billions</Text>
               </Flex>
               <Flex>
-                <Text width={1 / 4} >Total cells count </Text> <Text color='#FF00AA'>{Math.round(starters[index].total)} Billions</Text>
+                <Text width={[1 / 2, 1 / 4, 1 / 4]} >Total cells count </Text> <Text color='#FF00AA'>{Math.round(starters[index].total)} Billions</Text>
               </Flex>
             </Box>
           </Box>
