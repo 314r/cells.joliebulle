@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import './App.css'
 import DryConf from './DryConf.js'
 import LiquidConf from './LiquidConf.js'
+import ModeRadio from './ModeRadio.js'
 import { ThemeProvider } from 'emotion-theming'
 import styled from '@emotion/styled'
 import theme from '@rebass/preset'
@@ -137,7 +138,6 @@ function App () {
     setPitchRateTarget(parseFloat(e.target.value))
   }
   const onTypeChanged = e => {
-    console.log(e.target.value)
     setType(e.target.value)
   }
   const onCellsPerPackChanged = e => {
@@ -179,7 +179,7 @@ function App () {
 
   useEffect(() => {
     generateStarter()
-  }, [cellsPitched])
+  }, [cellsPitched, mode])
 
   useEffect(() => {
     const newStarters = [...starters]
@@ -417,7 +417,8 @@ function App () {
           </Box>
         </Box>
         <Heading pt={5}>⚙️&nbsp;Starters</Heading>
-        {pitchSpread < 0 && <Text fontWeight={500} pt={4}>🎁&nbsp;Not required</Text> }
+        {pitchSpread <= 0 && <Text fontWeight={500} pt={4}>🎁&nbsp;Not required</Text> }
+        {pitchSpread > 0 && <ModeRadio setMode={setMode} />}
         {starters.map((step, index) => (
 
           <Box key={index} mt={4}>
