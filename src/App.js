@@ -125,6 +125,7 @@ function App () {
   const [pitchSpread, setPitchSpread] = useState(0)
 
   const [starters, setStarters] = useState([])
+  const [mode, setMode] = useState('stir')
 
   const onGravityChanged = e => {
     setGravity(parseFloat(e.target.value))
@@ -202,13 +203,13 @@ function App () {
     newStarter.size = newSize
     newStarter.dme = dmeQty(newStarter.gravity, newSize)
     if (index === 0) {
-      newStarter.newCells = newCellsStir(cellsPitched, newStarter.dme)
+      newStarter.newCells = mode === 'stir' ? newCellsStir(cellsPitched, newStarter.dme) : newCellsNoStir(cellsPitched, newStarter.dme)
       newStarter.total = totalCells(cellsPitched, newStarter.newCells)
       newStarter.rate = pitchRateCalc(gravity, size, newStarter.total)
       generateStarter2(newStarter)
     }
     if (index === 1) {
-      newStarter.newCells = newCellsStir(starters[0].total, newStarter.dme)
+      newStarter.newCells = mode === 'stir' ? newCellsStir(starters[0].total, newStarter.dme) : newCellsNoStir(starters[0].total, newStarter.dme)
       newStarter.total = totalCells(starters[0].total, newStarter.newCells)
       newStarter.rate = pitchRateCalc(gravity, size, newStarter.total)
       setStarters(updateList([...starters], newStarter))
@@ -221,13 +222,13 @@ function App () {
     newStarter.gravity = newGravity
     newStarter.dme = dmeQty(newGravity, newStarter.size)
     if (index === 0) {
-      newStarter.newCells = newCellsStir(cellsPitched, newStarter.dme)
+      newStarter.newCells = mode === 'stir' ? newCellsStir(cellsPitched, newStarter.dme) : newCellsNoStir(cellsPitched, newStarter.dme)
       newStarter.total = totalCells(cellsPitched, newStarter.newCells)
       newStarter.rate = pitchRateCalc(gravity, size, newStarter.total)
       generateStarter2(newStarter)
     }
     if (index === 1) {
-      newStarter.newCells = newCellsStir(starters[0].total, newStarter.dme)
+      newStarter.newCells = mode === 'stir' ? newCellsStir(starters[0].total, newStarter.dme) : newCellsNoStir(starters[0].total, newStarter.dme)
       newStarter.total = totalCells(starters[0].total, newStarter.newCells)
       newStarter.rate = pitchRateCalc(gravity, size, newStarter.total)
       setStarters(updateList([...starters], newStarter))
@@ -237,7 +238,7 @@ function App () {
   const generateStarter = () => {
     if (pitchSpread > 0) {
       const dme = dmeQty(1.037, 2)
-      const newCells = newCellsStir(cellsPitched, dme)
+      const newCells = mode === 'stir' ? newCellsStir(cellsPitched, dme) : newCellsNoStir(cellsPitched, dme)
       const total = totalCells(cellsPitched, newCells)
       const rate = pitchRateCalc(gravity, size, total)
       const newStarter = {
@@ -252,7 +253,7 @@ function App () {
       setStarters([newStarter])
       if (newStarter.total < targetCells) {
         const dme = dmeQty(1.037, 2)
-        const newCells = newCellsStir(newStarter.total, dme)
+        const newCells = mode === 'stir' ? newCellsStir(newStarter.total, dme) : newCellsNoStir(newStarter.total, dme)
         const total = totalCells(newStarter.total, newCells)
         const rate = pitchRateCalc(gravity, size, total)
         const starter2 = {
@@ -276,7 +277,7 @@ function App () {
       const starterGravity = starters[1].gravity
       const starterSize = starters[1].size
       const dme = starters[1].dme
-      const newCells = newCellsStir(starter1.total, dme)
+      const newCells = mode === 'stir' ? newCellsStir(starter1.total, dme) : newCellsNoStir(starter1.total, dme)
       const total = totalCells(starter1.total, newCells)
       const rate = pitchRateCalc(gravity, size, total)
       const starter2 = { id, size: starterSize, gravity: starterGravity, dme, newCells, total, rate }
@@ -287,7 +288,7 @@ function App () {
       const starterGravity = 1.037
       const starterSize = 2
       const dme = dmeQty(1.037, 2)
-      const newCells = newCellsStir(starter1.total, dme)
+      const newCells = mode === 'stir' ? newCellsStir(starter1.total, dme) : newCellsNoStir(starter1.total, dme)
       const total = totalCells(starter1.total, newCells)
       const rate = pitchRateCalc(gravity, size, total)
       const starter2 = { id, size: starterSize, gravity: starterGravity, dme, newCells, total, rate }
