@@ -3,6 +3,7 @@ import './App.css'
 import DryConf from './DryConf.js'
 import LiquidConf from './LiquidConf.js'
 import ModeRadio from './ModeRadio.js'
+import DryStarter from './DryStarter.js'
 import { ThemeProvider } from 'emotion-theming'
 import styled from '@emotion/styled'
 import theme from '@rebass/preset'
@@ -28,9 +29,7 @@ import '@reach/menu-button/styles.css'
 
 const nanoid = require('nanoid')
 
-// responsive design
 // no starter if dry
-// no stir
 // remove icon
 
 const StyledMenuButton = styled(MenuButton)`
@@ -417,6 +416,7 @@ function App () {
           </Box>
         </Box>
         <Heading pt={5}>⚙️&nbsp;Starters</Heading>
+        {type === 'dry' && <DryStarter />}
         {pitchSpread <= 0 && <Text fontWeight={500} pt={4}>🎁&nbsp;Not required</Text> }
         {pitchSpread > 0 && <ModeRadio setMode={setMode} />}
         {starters.map((step, index) => (
