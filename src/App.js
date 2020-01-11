@@ -30,9 +30,10 @@ import {
 import '@reach/menu-button/styles.css'
 
 const nanoid = require('nanoid')
-// suggested rates
+
 // responsive design
 // no starter if dry
+// remove icon
 
 const StyledMenuButton = styled(MenuButton)`
   border:none;
@@ -344,9 +345,9 @@ function App () {
                   <Menu>
                     <StyledMenuButton>&#8226;&#8226;&#8226;&nbsp;&nbsp;Suggested</StyledMenuButton>
                     <StyledMenuList>
-                      <MenuItem>Fresh culture: 0.35</MenuItem>
-                      <MenuItem>Default: 1</MenuItem>
-                      <MenuItem>Lager: 1.5</MenuItem>
+                      <MenuItem onSelect={() => setPitchRateTarget(0.75)}>Ale: 0.75</MenuItem>
+                      <MenuItem onSelect={() => setPitchRateTarget(1)}>Default: 1</MenuItem>
+                      <MenuItem onSelect={() => setPitchRateTarget(1.5)}>Lager: 1.5</MenuItem>
 
                     </StyledMenuList>
                   </Menu>
@@ -357,11 +358,11 @@ function App () {
               <Flex alignItems='center' width={1} mt={3} >
                 <Label width={1 / 4}>Target Rate</Label>
                 <Input
-                  width={1 / 8}
+                  width={1 / 4}
                   type='number'
-                  min='0.35'
-                  step='0.15'
-                  defaultValue='1'
+                  min='0.15'
+                  step='0.05'
+                  value={pitchRateTarget}
                   onChange={e => onRateTargetChanged(e)}
                 />
               </Flex>
