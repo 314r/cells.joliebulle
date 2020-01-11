@@ -3,6 +3,7 @@ import './App.css'
 import DryConf from './DryConf.js'
 import LiquidConf from './LiquidConf.js'
 import { ThemeProvider } from 'emotion-theming'
+import styled from '@emotion/styled'
 import theme from '@rebass/preset'
 import {
   Box,
@@ -17,9 +18,64 @@ import {
   Radio
 } from '@rebass/forms'
 
+import {
+  Menu,
+  MenuList,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  MenuPopover,
+  MenuLink
+} from '@reach/menu-button'
+import '@reach/menu-button/styles.css'
+
 const nanoid = require('nanoid')
 // suggested rates
-// design
+// responsive design
+// no starter if dry
+
+const StyledMenuButton = styled(MenuButton)`
+  border:none;
+  color:#4b4b4b;
+  background:#e1e1e1;
+  font-size: 14px;
+  border-radius:4px;
+  cursor: pointer;
+  height:26px;
+  padding-right:8px;
+  padding-left:8px;
+  margin-top:5px;
+  transition: all 0.2s ease 0s;
+  :focus {
+    outline: 0;
+  }
+  :hover {
+    background:#cacaca;
+    transition: all 0.2s ease 0s;
+  }
+
+`
+const StyledMenuList = styled(MenuList)`
+  @keyframes slide-down {
+      0% {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  animation: slide-down 0.2s ease;
+  background: white;
+  font-weight:500;
+  > [data-reach-menu-item] {
+    font-size: 14px;
+  }
+  > [data-reach-menu-item][data-selected] {
+    background: #1070CA;
+    color: white;
+  }`
 
 function App () {
   const updateList = (itemList, updatedItem) =>
@@ -283,7 +339,18 @@ function App () {
             </Flex>
             <Flex width={1 / 3} mb={5} flexDirection='column' pr={4}>
               <Box>
-                <Text fontWeight='bold' pt={3}>Pitching rate</Text>
+                <Flex justifyContent='space-between'>
+                  <Text fontWeight='bold' pt={3}>Pitching rate</Text>
+                  <Menu>
+                    <StyledMenuButton>&#8226;&#8226;&#8226;&nbsp;&nbsp;Suggested</StyledMenuButton>
+                    <StyledMenuList>
+                      <MenuItem>Fresh culture: 0.35</MenuItem>
+                      <MenuItem>Default: 1</MenuItem>
+                      <MenuItem>Lager: 1.5</MenuItem>
+
+                    </StyledMenuList>
+                  </Menu>
+                </Flex>
                 <hr style={{ border: 'none', height: '1px', borderWidth: '1px', borderRadius: '1px', backgroundColor: 'rgb(211, 211, 211)' }} />
               </Box>
 
@@ -298,6 +365,7 @@ function App () {
                   onChange={e => onRateTargetChanged(e)}
                 />
               </Flex>
+              <Text color='#8e8e8e' fontWeight={500} mt={2}>Cells/ml/°Plato</Text>
             </Flex>
             <Box width={1 / 3}>
               <Box>
