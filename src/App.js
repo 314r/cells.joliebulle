@@ -29,7 +29,6 @@ import '@reach/menu-button/styles.css'
 
 const nanoid = require('nanoid')
 
-// no starter if dry
 // remove icon
 
 const StyledMenuButton = styled(MenuButton)`
@@ -377,7 +376,7 @@ function App () {
                   onChange={e => onRateTargetChanged(e)}
                 />
               </Flex>
-              <Text color='#8e8e8e' fontWeight={500} mt={2}>Cells/ml/°Plato</Text>
+              <Text color='#8e8e8e' fontWeight={500} mt={2}>M Cells/ml/°Plato</Text>
             </Flex>
             <Flex width={[1, 1 / 2, 1 / 3]} flexDirection='column'>
               <Box>
