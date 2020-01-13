@@ -22,7 +22,7 @@ function LiquidConf ({ onCellsPerPackChanged, onAgeChanged }) {
         <Input
           width={[1 / 2, 1 / 4, 1 / 4]}
           type='number'
-          min='1'
+          min='0'
           step='10'
           defaultValue='100'
           onChange={e => onCellsPerPackChanged(e)}

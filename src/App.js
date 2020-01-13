@@ -6,7 +6,7 @@ import ModeRadio from './ModeRadio.js'
 import DryStarter from './DryStarter.js'
 import { ThemeProvider } from 'emotion-theming'
 import styled from '@emotion/styled'
-import theme from '@rebass/preset'
+import theme from './theme'
 import {
   Box,
   Text,
@@ -300,8 +300,22 @@ function App () {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box p={5}>
+      <Box
+        width='100%'
+        height='48px'
+        sx={{
+          position: 'fixed',
+          bg: '#fff'
+        }}
+      >
+        <Flex justifyContent='space-between' width={1} flexWrap='wrap'>
+          <Flex pt={3} pl={3} fontWeight='500' width={[1 / 4, 1 / 2, 1 / 4]}>
+            <Text as='span' color='#735DD0'>🛠/cells.<span>joliebulle</span></Text>
+          </Flex>
+        </Flex>
 
+      </Box>
+      <Box p={5}>
         <Box as='form'
           pt={3}
           fontWeight={500}
