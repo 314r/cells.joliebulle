@@ -11,7 +11,8 @@ import {
   Box,
   Text,
   Flex,
-  Heading
+  Heading,
+  Link
 } from 'rebass'
 import {
   Label,
@@ -480,6 +481,10 @@ function App () {
           </Box>
         )
         )}
+        <Flex fontWeight='bold' mt={6} justifyContent='space-between' flexWrap='wrap'>
+          <Link href='https://github.com/314r/cells.joliebulle' color='#735DD0'>Source Code (MIT Licensed)</Link>
+          <Text>Use at your own risks !</Text>
+        </Flex>
       </Box>
     </ThemeProvider>
   )
