@@ -78,9 +78,6 @@ function App () {
   const updateList = (itemList, updatedItem) =>
     itemList.map(item => ((item.id === updatedItem.id) ? updatedItem : item))
 
-  const deleteItem = (itemList, itemToDel) =>
-    itemList.filter(item => (item.id !== itemToDel.id))
-
   const sgToPlato = (sg) => (((182.4601 * sg - 775.6821) * sg + 1262.7794) * sg - 669.5622) / 1.04
   const pitchTarget = (sg, volumeL, rate) => sgToPlato(sg) * volumeL * rate
   const pitchRateCalc = (sg, volumeL, cells) => cells / sgToPlato(sg) / (volumeL)
