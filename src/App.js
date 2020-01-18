@@ -131,7 +131,7 @@ function App () {
     setSize(parseFloat(e.target.value))
   }
   const onRateTargetChanged = e => {
-    setPitchRateTarget(parseFloat(e.target.value))
+    setPitchRateTarget(e.target.value)
   }
   const onTypeChanged = e => {
     setType(e.target.value)
